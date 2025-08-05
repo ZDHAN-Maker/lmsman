@@ -12,8 +12,6 @@ class Kernel extends HttpKernel
         // middleware bawaan Laravel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ensure.token' => \App\Http\Middleware\EnsureTokenIsValid::class,
-        
-        // middleware custom kamu
-        'ensure.token' => \App\Http\Middleware\EnsureTokenIsValid::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 }

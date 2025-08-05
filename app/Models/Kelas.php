@@ -10,7 +10,7 @@ class Kelas extends Model
     use HasFactory;
     protected $table = 'kelas';
 
-    protected $fillable = ['name', 'guru_id'];
+    protected $fillable = ['name', 'guru_id','semester_id',];
     protected static function booted()
     {
         static::addGlobalScope('orderByName', function ($query) {
@@ -27,7 +27,12 @@ class Kelas extends Model
         return $this->hasMany(JadwalKelas::class);
     }
     public function semester()
-{
-    return $this->belongsTo(Semester::class);
-}
+    {
+        return $this->belongsTo(Semester::class);
+    }
+
+    public function Siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'siswa_id');
+    }
 }

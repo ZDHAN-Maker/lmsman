@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens,HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-       'name',
+        'name',
         'email',
         'password',
         'role_id',
@@ -58,9 +58,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(SuratIzin::class, 'murid_id');
     }
+
+    public function scopeGuru($query)
+    {
+        return $query->whereHas('role', function ($q) {
+            $q->where('name', 'guru');
+        });
+    }
+
+    public function scopeSiswa($query)
+    {
+
+        return $query->whereHas('role', function ($q) {
+            $q->where('name', 'siswa');
+        });
+    }
+
+
     public function getRoleNameAttribute()
     {
-    return $this->role->name ?? null;
+        return $this->role->name ?? null;
     }
     /**
      * Get the attributes that should be cast.

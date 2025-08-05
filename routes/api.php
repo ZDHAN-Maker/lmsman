@@ -13,31 +13,41 @@ use App\Http\Controllers\AbsensiMuridController;
 use App\Http\Controllers\DashboardGuruController;
 use App\Http\Controllers\DashboardAdminController;
 
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('kelas', KelasController::class);
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | AUTH
 |--------------------------------------------------------------------------
 */
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+//
+//Route::post('/login', [AuthController::class, 'login']);
+//Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);//
 
 /*
 |--------------------------------------------------------------------------
 | ADMIN
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
-    Route::get('/dashboard-admin', [DashboardAdminController::class, 'index']);
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('kelas', KelasController::class);
-});
+//Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
+   // Route::get('/dashboard-admin', [DashboardAdminController::class, 'index']);
+   // Route::apiResource('users', UserController::class);
+    //Route::apiResource('kelas', KelasController::class);
+//});
+//
 
 /*
 |--------------------------------------------------------------------------
 | GURU
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum', 'role:Guru'])->group(function () {
+//Route::middleware(['auth:sanctum', 'role:Guru'])->group(function () {
     Route::get('/dashboard-guru', [DashboardGuruController::class, 'index']);
 
     // Absensi oleh Guru
@@ -48,21 +58,21 @@ Route::middleware(['auth:sanctum', 'role:Guru'])->group(function () {
 
     // Verifikasi Surat Izin
     Route::post('/surat-izin/{id}/update-status', [SuratIzinController::class, 'updateStatus']);
-});
+//});
 
 
 // Surat izin (murid bisa store, guru bisa lihat)
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     Route::apiResource('surat-izin', SuratIzinController::class);
-// });
+//Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('surat-izin', SuratIzinController::class);
+//});
 
-// Route::middleware(['auth:sanctum', 'role:Murid'])->group(function () {
-//     Route::get('/jadwal', [JadwalController::class, 'index']);          // 🔍 List semua jadwal
-//     Route::post('/jadwal', [JadwalController::class, 'store']);         // ➕ Tambah jadwal
-//     Route::get('/jadwal/{id}', [JadwalController::class, 'show']);      // 📄 Detail 1 jadwal (khusus guru pemilik)
-//     Route::put('/jadwal/{id}', [JadwalController::class, 'update']);    // ✏️ Update jadwal
-//     Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy']); // ❌ Hapus jadwal
-// });
+//Route::middleware(['auth:sanctum', 'role:Murid'])->group(function () {
+    Route::get('/jadwal', [JadwalController::class, 'index']);          // 🔍 List semua jadwal
+    Route::post('/jadwal', [JadwalController::class, 'store']);         // ➕ Tambah jadwal
+    Route::get('/jadwal/{id}', [JadwalController::class, 'show']);      // 📄 Detail 1 jadwal (khusus guru pemilik)
+    Route::put('/jadwal/{id}', [JadwalController::class, 'update']);    // ✏️ Update jadwal
+    Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy']); // ❌ Hapus jadwal
+//});
 
 
 /*
@@ -70,7 +80,7 @@ Route::middleware(['auth:sanctum', 'role:Guru'])->group(function () {
 | MURID
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum', 'role:Murid'])->group(function () {
+//Route::middleware(['auth:sanctum', 'role:Murid'])->group(function () {
     // Jadwal
     Route::get('/jadwal', [JadwalController::class, 'index']);
     Route::get('/jadwal/{id}', [JadwalController::class, 'show']);
@@ -82,8 +92,5 @@ Route::middleware(['auth:sanctum', 'role:Murid'])->group(function () {
 
     // Upload surat izin (termasuk foto/scan)
     Route::apiResource('surat-izin', SuratIzinController::class)->only(['index', 'store', 'show']);
-});
-
-Route::post('/admin/moodle/create-user', [DashboardAdminController::class, 'createMoodleUser']);
-Route::get('/admin/dashboard', [DashboardAdminController::class, 'index'])
-    ->middleware('ensure.token');
+//});
+//
