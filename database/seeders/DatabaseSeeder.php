@@ -20,29 +20,35 @@ class DatabaseSeeder extends Seeder
         $guruRole = Role::where('name', 'Guru')->first();
         $siswaRole = Role::where('name', 'Siswa')->first();
 
-        // Admin pakai email
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
-            'role_id' => $adminRole->id,
-        ]);
+        // Cek dulu sebelum membuat user Admin
+        if (!User::where('email', 'admin@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('password123'),
+                'role_id' => $adminRole->id,
+            ]);
+        }
 
-        // Guru pakai email
-        User::factory()->create([
-            'name' => 'Guru Contoh',
-            'email' => 'guru@example.com',
-            'password' => Hash::make('password123'),
-            'role_id' => $guruRole->id,
-        ]);
+        // Cek dulu sebelum membuat user Guru
+        if (!User::where('email', 'guru@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Guru Contoh',
+                'email' => 'guru@example.com',
+                'password' => Hash::make('password123'),
+                'role_id' => $guruRole->id,
+            ]);
+        }
 
-        // Siswa contoh pakai NISN
-        User::factory()->create([
-            'name' => 'Siswa Contoh',
-            'nisn' => '1234567890',   // 🔑 Ini contoh NISN
-            'email' => null,          // Boleh null kalau memang tidak pakai email
-            'password' => Hash::make('password123'),
-            'role_id' => $siswaRole->id,
-        ]);
+        // Cek dulu sebelum membuat user Siswa
+        if (!User::where('nisn', '1234567890')->exists()) {
+            User::factory()->create([
+                'name' => 'Siswa Contoh',
+                'nisn' => '1234567890',
+                'email' => null,
+                'password' => Hash::make('password123'),
+                'role_id' => $siswaRole->id,
+            ]);
+        }
     }
 }
